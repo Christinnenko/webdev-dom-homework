@@ -344,27 +344,30 @@
 
     //ДОБАВЛЕНИЕ И СНЯТИЕ ЛАЙКА НА КОММЕНТАРИИ
 
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     // Функция для добавления лайка
     function addLike(index) {
       const likeButtons = document.querySelectorAll(".like-button");
       const likeButton = likeButtons[index];
       const comment = comments[index];
 
-      if (!comment.isLiked) {
-        comment.like += 1;
-        comment.isLiked = true; // Устанавливаем состояние лайка в "закрашенный"
-        renderComments();
-      } else {
-        comment.like -= 1;
-        comment.isLiked = false; // Устанавливаем состояние лайка в "не закрашенный"
-        renderComments();
-      }
 
-
-      // Обновляем счетчик лайков
-      const likeCounter = likeButton.previousElementSibling;
-      likeCounter.textContent = comment.like;
+      delay(2000).then(() => {
+        if (!comment.isLiked) {
+          comment.like += 1;
+          comment.isLiked = true; // Устанавливаем состояние лайка в "закрашенный"
+          renderComments();
+        } else {
+          comment.like -= 1;
+          comment.isLiked = false; // Устанавливаем состояние лайка в "не закрашенный"
+          renderComments();
+        }
+      });
     }
+
 
 
     // Функция для привязки обработчиков событий к кнопкам "лайк"
@@ -373,7 +376,10 @@
 
       likeButtons.forEach((likeButton, index) => {
         likeButton.addEventListener("click", () => {
+
           addLike(index);
+          likeButton.classList.add("-loading-like");
+
         });
       });
     }

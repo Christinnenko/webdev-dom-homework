@@ -1,3 +1,19 @@
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(30deg);;
+  }
+  75% {
+    transform: rotate(-30deg);;
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+
 body {
     margin: 0;
   }
@@ -203,5 +219,9 @@ body {
     width: 100px; 
     height: 100px; 
     background: url('./image/loading.gif') no-repeat;
+  }
+
+  .-loading-like {
+    animation: rotating 2s linear infinite;
   }
   
