@@ -30,13 +30,34 @@
 
     "use strict";
 
+    //функция добавления лоадера и неактивности кнопки "Написать"
+    function showLoadingIndicator() {
+      const addForm = document.querySelector(".add-form");
+      const loadingIndicator = document.querySelector(".loading-indicator");
+      const writeButtonElement = document.getElementById("button-write");
+
+      loadingIndicator.style.display = "flex";
+      writeButtonElement.disabled = true;
+      writeButtonElement.classList.remove("add-form-button");
+      writeButtonElement.classList.add("inactive-form-button");
+    }
+
+    //функция отмены лоадера и активности кнопки "Написать"
+    function hideLoadingIndicator() {
+      const addForm = document.querySelector(".add-form");
+      const loadingIndicator = document.querySelector(".loading-indicator");
+      const writeButtonElement = document.getElementById("button-write");
+
+      loadingIndicator.style.display = "none";
+      writeButtonElement.disabled = false;
+      writeButtonElement.classList.remove("inactive-form-button");
+      writeButtonElement.classList.add("add-form-button");
+    }
+
 
     //РЕНДЕР СПИСКА КОММЕНТАРИЕВ
-
-
     // рендер-функция 
     function renderComments() {
-
 
       // поиск элемента списка
       const listElement = document.getElementById("list");
@@ -74,22 +95,21 @@
     }
 
 
-
     // рендер имеющихся на сервере комментариев 
 
     let comments = [];
 
-
     function getFetch() {
+
       showLoadingIndicator();
 
-      const fetchPromise = fetch('https://wedev-api.sky.pro/api/v1/christina-ermolenko/comments', {
+      fetch('https://wedev-api.sky.pro/api/v1/christina-ermolenko/comments', {
         method: "GET"
-      });
-
-      fetchPromise.then((response) => {
-
-        response.json().then((responseData) => {
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((responseData) => {
           const appComment = responseData.comments.map((comment) => {
             return {
               name: comment.author.name,
@@ -105,16 +125,13 @@
           renderComments();
           hideLoadingIndicator();
         });
-      });
     }
 
     getFetch();
 
-
     // добавляем обработчики на полученные комментарии
     addEditAndSaveEventListeners();
     addAnswerEventListeners();
-
 
 
 
@@ -149,39 +166,14 @@
       return formattedDate;
     }
 
-    //функция добавления лоадера и неактивности кнопки "Написать"
-    function showLoadingIndicator() {
-      const addForm = document.querySelector(".add-form");
-      const loadingIndicator = document.querySelector(".loading-indicator");
-      const writeButtonElement = document.getElementById("button-write");
 
-
-
-      loadingIndicator.style.display = "flex";
-      writeButtonElement.disabled = true;
-      writeButtonElement.classList.remove("add-form-button");
-      writeButtonElement.classList.add("inactive-form-button");
-    }
-
-    //функция отмены лоадера и активности кнопки "Написать"
-    function hideLoadingIndicator() {
-      const addForm = document.querySelector(".add-form");
-      const loadingIndicator = document.querySelector(".loading-indicator");
-      const writeButtonElement = document.getElementById("button-write");
-
-
-      loadingIndicator.style.display = "none";
-      writeButtonElement.disabled = false;
-      writeButtonElement.classList.remove("inactive-form-button");
-      writeButtonElement.classList.add("add-form-button");
-    }
-
-
-    const listElement = document.getElementById("list");
 
     // функция добавления комментария на сервер
     function addComment() {
-
+      const nameInputElement = document.getElementById("input-name");
+      const commentInputElement = document.getElementById("input-comment");
+      const writeButtonElement = document.getElementById("button-write");
+      const listElement = document.getElementById("list");
 
       showLoadingIndicator();
       let nowDate = new Date;
@@ -203,72 +195,26 @@
           like: 0,
           isLiked: false,
         }),
-      }).then((response) => {
-
-        response.json().then((responseData) => {
-          comments.push({
-            name: nameInputElement.value
-              .replaceAll("&", "&amp;")
-              .replaceAll("<", "&lt;")
-              .replaceAll(">", "&gt;")
-              .replaceAll('"', "&quot;"),
-            date: correctDate(nowDate),
-            text: commentInputElement.value
-              .replaceAll("&", "&amp;")
-              .replaceAll("<", "&lt;")
-              .replaceAll(">", "&gt;")
-              .replaceAll('"', "&quot;"),
-            like: 0,
-            isLiked: false,
-          });
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((responseData) => {
+          getFetch();
           hideLoadingIndicator();
-          renderComments();
 
           // Очищаем поля ввода
           nameInputElement.value = "";
           commentInputElement.value = "";
         });
-      });
 
       getFetch();
-
-
-      // Добавляем HTML нового комментария
-      const newCommentHTML = `<li class="comment">
-           <div class="comment-header">
-             <div>${comments[comments.length - 1].name}</div>
-             <div>${comments[comments.length - 1].date}</div>
-           </div>
-           <div class="comment-body">
-             <div class="comment-text">
-               <span class="comment-content">${comments[comments.length - 1].text.replaceAll("BEGIN_QUOTE--", "<div class='quote'>").replaceAll("--END_QUOTE", "</div>")}</span>
-               <textarea class="comment-edit" style="display: none;"></textarea>
-             </div>
-           </div>
-           <div class="comment-footer">
-             <div class="likes">
-             <span class="likes-counter">${comments[comments.length - 1].like}</span>
-             <button data-index="${comments.length - 1}" class="like-button"></button>
-           </div>
-             <button data-index="${comments.length - 1}" class="edit-button">Редактировать</button>
-             <button data-index="${comments.length - 1}" class="save-button">Сохранить</button>
-           </div>
-         </li>`;
-
-
-
-      // Добавляем новый комментарий к списку
-      const oldListHtml = listElement.innerHTML;
-      listElement.innerHTML = oldListHtml + newCommentHTML;
-
-      // Очищаем поля ввода
-      nameInputElement.value = "";
-      commentInputElement.value = "";
 
       // Проверяем, остались ли комментарии после добавления нового
       isCommentEmpty();
       addEditAndSaveEventListeners();
     }
+
 
 
     // добавление обработчика клика при нажатии на Enter в поле заполнения имени
