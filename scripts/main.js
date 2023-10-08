@@ -2,7 +2,6 @@
 
 import { getFetchAndRender } from './api.js';
 
-
 // рендер имеющихся на сервере комментариев 
 export let comments = [];
 export const setComments = (newComments) => {
@@ -10,3 +9,4 @@ export const setComments = (newComments) => {
 }
 
 getFetchAndRender();
+

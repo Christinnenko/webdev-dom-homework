@@ -9,10 +9,7 @@ function delay(ms) {
 
 // Функция для добавления лайка
 export function addLike(index) {
-    const likeButtons = document.querySelectorAll(".like-button");
-    const likeButton = likeButtons[index];
     const comment = comments[index];
-
 
     delay(2000).then(() => {
         if (!comment.isLiked) {

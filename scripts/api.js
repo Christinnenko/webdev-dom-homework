@@ -1,8 +1,7 @@
-import { correctDate } from './helpers.js';
+import { correctDate, isCommentEmpty } from './helpers.js';
 import { showLoadingIndicator, hideLoadingIndicator } from './loadingIndicator.js';
 import { setComments } from './main.js';
 import { renderComments } from './renderComments.js';
-import { isCommentEmpty } from './helpers.js';
 import { addEditAndSaveEventListeners } from './listeners.js';
 
 
