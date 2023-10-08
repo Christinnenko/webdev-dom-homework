@@ -1,5 +1,4 @@
 import { nameInputElement, commentInputElement } from './listeners.js'
-import { addComment } from './api.js';
 
 
 // изменение формата даты
@@ -37,17 +36,11 @@ export function isCommentEmpty() {
     }
 };
 
-//writeButtonElement.classList.add("add-form-button");
-//writeButtonElement.disabled = false;
+
 
 // Проверка на заполнение полей имени и комментария
 export function isInputFieldEmpty() {
     const writeButtonElement = document.getElementById("button-write");
-
-    //устанавливаем начальные свойства полей ввода и кнопки написать
-    writeButtonElement.classList.add("add-form-button");
-    writeButtonElement.disabled = false;
-
 
     // проверка полей ввода на заполнение, если поля не заполнены - подсвечивает красным, кнопку делает неактивной и серой
     if (nameInputElement.value.trim() === "" && commentInputElement.value.trim() === "") {
@@ -83,7 +76,8 @@ export function isInputFieldEmpty() {
         writeButtonElement.classList.remove("inactive-form-button");
         writeButtonElement.classList.add("add-form-button");
         writeButtonElement.disabled = false;
-        addComment();
     }
 }
+nameInputElement.addEventListener("input", isInputFieldEmpty);
+commentInputElement.addEventListener("input", isInputFieldEmpty);
 

@@ -1,7 +1,7 @@
 import { comments } from './main.js';
-import { addLikeEventListeners } from './listeners.js'
-import { addEditAndSaveEventListeners } from './listeners.js';
+import { addLikeEventListeners, addEditAndSaveEventListeners } from './listeners.js';
 import { addAnswerEventListeners } from './answerComment.js';
+import { isCommentEmpty } from './helpers.js'
 
 
 
@@ -45,5 +45,6 @@ export function renderComments() {
   addLikeEventListeners();
   addEditAndSaveEventListeners();
   addAnswerEventListeners();
+  isCommentEmpty();
 }
 

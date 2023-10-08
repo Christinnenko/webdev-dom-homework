@@ -1,8 +1,9 @@
-import { isInputFieldEmpty } from './helpers.js';
-import { comments } from './main.js';
 import { isCommentEmpty } from './helpers.js';
+import { comments } from './main.js';
 import { editComment, saveComment } from './editComments.js'
 import { addLike } from './likes.js';
+import { addComment } from './api.js';
+
 
 export const writeButtonElement = document.getElementById("button-write");
 export const nameInputElement = document.getElementById("input-name");
@@ -35,20 +36,20 @@ export function addEditAndSaveEventListeners() {
 // добавление обработчика клика при нажатии на Enter в поле заполнения имени
 nameInputElement.addEventListener("keyup", (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey && !event.altKey) {
-        isInputFieldEmpty(event);
+        addComment();
     }
 });
 
 // добавление обработчика клика при нажатии на Enter в поле заполнения комментария
 commentInputElement.addEventListener("keyup", (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey && !event.altKey) {
-        isInputFieldEmpty(event);
+        addComment();
     }
 });
 
 // добавление обработчика клика при нажатии на кнопку "написать"
-writeButtonElement.addEventListener("click", (event) => {
-    isInputFieldEmpty(event);
+writeButtonElement.addEventListener("click", () => {
+    addComment();
 });
 
 
