@@ -16,7 +16,7 @@
       <button id="button-delete" class="add-form-button inactive-form-button">Удалить последний комментарий</button>
     </div>
     <div class="loading-indicator"></div>
-    <div class="add-form">
+    <div id="comment-form" class="add-form">
       <input id="input-name" type="text" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="input-comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>
@@ -87,8 +87,10 @@
         </li>`
       }).join('');
 
+
       // отрисовка HTML строки на экране
       listElement.innerHTML = commentsHTML;
+
 
       addLikeEventListeners();
       addEditAndSaveEventListeners();
@@ -104,10 +106,14 @@
       showLoadingIndicator();
 
       fetch('https://wedev-api.sky.pro/api/v1/christina-ermolenko/comments', {
-        method: "GET"
+        method: "GET",
       })
         .then((response) => {
-          return response.json();
+          if (response.status === 500) {
+            alert('Сервер сломался, попробуй позже');
+          } else {
+            return response.json();
+          }
         })
         .then((responseData) => {
           const appComment = responseData.comments.map((comment) => {
@@ -118,14 +124,20 @@
               like: comment.likes,
               isLiked: false,
             }
-          });
+          })
 
           comments = appComment;
-
           renderComments();
           hideLoadingIndicator();
-        });
-    }
+        })
+        .catch((error) => {
+          alert('Кажется, у вас сломался интернет, попробуйте позже');
+
+          //отправка в систему сбора ошибок
+          console.warn(error);
+        })
+
+    };
 
     getFetch();
 
@@ -138,8 +150,6 @@
     // КНОПКА "НАПИСАТЬ" + ENTER
 
     // поиск элементов
-    const nameInputElement = document.getElementById("input-name");
-    const commentInputElement = document.getElementById("input-comment");
     const writeButtonElement = document.getElementById("button-write");
 
 
@@ -168,6 +178,15 @@
 
 
 
+    //для  сохранения полей ввода в случае возникновения ошибок
+    // Получаем элементы полей ввода
+    const nameInputElement = document.getElementById("input-name");
+    const commentInputElement = document.getElementById("input-comment");
+
+    // Переменные для хранения введенных данных
+    let enteredName = "";
+    let enteredComment = "";
+
     // функция добавления комментария на сервер
     function addComment() {
       const nameInputElement = document.getElementById("input-name");
@@ -176,7 +195,7 @@
       const listElement = document.getElementById("list");
 
       showLoadingIndicator();
-      let nowDate = new Date;
+      let nowDate = new Date();
 
       fetch('https://wedev-api.sky.pro/api/v1/christina-ermolenko/comments', {
         method: "POST",
@@ -197,23 +216,38 @@
         }),
       })
         .then((response) => {
-          return response.json()
+          if (response.status === 400) {
+            alert('Имя и комментарий должны быть не короче 3 символов');
+          } else if (response.status === 500) {
+            alert('Сервер сломался, попробуй позже');
+          } else {
+            return response.json();
+          }
         })
         .then((responseData) => {
-          getFetch();
           hideLoadingIndicator();
-
-          // Очищаем поля ввода
-          nameInputElement.value = "";
-          commentInputElement.value = "";
+          // Очищаем поля ввода только в случае успешной отправки
+          if (responseData) {
+            nameInputElement.value = "";
+            commentInputElement.value = "";
+            enteredName = "";
+            enteredComment = "";
+            getFetch();
+          }
+        })
+        .catch((error) => {
+          hideLoadingIndicator();
+          writeButtonElement.disabled = false;
+          writeButtonElement.classList.add("add-form-button");
+          alert('Кажется, у вас сломался интернет, попробуйте позже');
+          console.warn(error);
         });
-
-      getFetch();
 
       // Проверяем, остались ли комментарии после добавления нового
       isCommentEmpty();
       addEditAndSaveEventListeners();
     }
+
 
 
 
@@ -268,7 +302,6 @@
 
         // вывод комментария, если все поля заполнены, c указанием даты в необходимом формате, проверка на наличие комментариев,
       } else {
-
         addComment();
         addLikeEventListeners();
         isCommentEmpty();
