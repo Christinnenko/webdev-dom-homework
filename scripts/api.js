@@ -1,18 +1,20 @@
 import { correctDate, isCommentEmpty } from './helpers.js';
 import { showLoadingIndicator, hideLoadingIndicator } from './loadingIndicator.js';
 import { setComments } from './main.js';
-import { renderApp } from './renderComments.js';
+import { addLoadingIndicator, renderApp } from './renderComments.js';
 import { addEditAndSaveEventListeners } from './listeners.js';
 
 
 //let login = prompt('Логин');
 
 let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
+token = null;
 
 const host = 'https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments';
 
 export function getFetchAndRender() {
 
+    addLoadingIndicator();
     showLoadingIndicator();
 
     fetch(host, {
@@ -46,7 +48,7 @@ export function getFetchAndRender() {
 
             setComments(appComment);
             renderApp();
-            hideLoadingIndicator();
+            // hideLoadingIndicator();
         })
         .catch((error) => {
             alert('Кажется, у вас сломался интернет, попробуйте позже');

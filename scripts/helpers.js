@@ -1,4 +1,3 @@
-import { nameInputElement, commentInputElement } from './listeners.js'
 
 
 // изменение формата даты
@@ -38,8 +37,12 @@ export function isCommentEmpty() {
 
 
 
+
 // Проверка на заполнение полей имени и комментария
 export function isInputFieldEmpty() {
+
+    const commentInputElement = document.getElementById("input-comment");
+    const nameInputElement = document.getElementById("input-name");
     const writeButtonElement = document.getElementById("button-write");
 
     // проверка полей ввода на заполнение, если поля не заполнены - подсвечивает красным, кнопку делает неактивной и серой
@@ -78,6 +81,13 @@ export function isInputFieldEmpty() {
         writeButtonElement.disabled = false;
     }
 }
-nameInputElement.addEventListener("input", isInputFieldEmpty);
-commentInputElement.addEventListener("input", isInputFieldEmpty);
+
+export function listenerInputFields() {
+    const commentInputElement = document.getElementById("input-comment");
+    const nameInputElement = document.getElementById("input-name");
+    nameInputElement.addEventListener("input", isInputFieldEmpty);
+    commentInputElement.addEventListener("input", isInputFieldEmpty);
+}
+
+
 
