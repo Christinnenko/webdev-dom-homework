@@ -1,20 +1,34 @@
 import { correctDate, isCommentEmpty } from './helpers.js';
 import { showLoadingIndicator, hideLoadingIndicator } from './loadingIndicator.js';
 import { setComments } from './main.js';
-import { renderComments } from './renderComments.js';
+import { renderApp } from './renderComments.js';
 import { addEditAndSaveEventListeners } from './listeners.js';
 
+
+//let login = prompt('Логин');
+
+let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
+
+const host = 'https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments';
 
 export function getFetchAndRender() {
 
     showLoadingIndicator();
 
-    fetch('https://wedev-api.sky.pro/api/v1/christina-ermolenko/comments', {
+    fetch(host, {
         method: "GET",
+        headers: {
+            Authorization: token,
+        },
     })
         .then((response) => {
             if (response.status === 500) {
                 alert('Сервер сломался, попробуй позже');
+                throw new Error('Неполадки в работе сервера');
+            } else if (response.status === 400) {
+                // token = prompt('Введите верный пароль');
+                // getFetchAndRender();
+                throw new Error('Нет авторизации');
             } else {
                 return response.json();
             }
@@ -31,7 +45,7 @@ export function getFetchAndRender() {
             })
 
             setComments(appComment);
-            renderComments();
+            renderApp();
             hideLoadingIndicator();
         })
         .catch((error) => {
@@ -56,7 +70,7 @@ export function addComment() {
 
     showLoadingIndicator();
 
-    fetch('https://wedev-api.sky.pro/api/v1/christina-ermolenko/comments', {
+    fetch(host, {
         method: "POST",
         body: JSON.stringify({
             name: nameInputElement.value
@@ -70,12 +84,17 @@ export function addComment() {
                 .replaceAll(">", "&gt;")
                 .replaceAll('"', "&quot;"),
         }),
+        headers: {
+            Authorization: token,
+        },
     })
         .then((response) => {
             if (response.status === 400) {
                 alert('Имя и комментарий должны быть не короче 3 символов');
+                throw new Error('Некорректно введены данные');
             } else if (response.status === 500) {
                 alert('Сервер сломался, попробуй позже');
+                throw new Error('Неполадки в работе сервера');
             } else {
                 return response.json();
             }

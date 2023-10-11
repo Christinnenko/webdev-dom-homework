@@ -1,5 +1,5 @@
 import { comments } from './main.js';
-import { renderComments } from './renderComments.js';
+import { renderApp } from './renderComments.js';
 
 //РЕДАКТИРОВАНИЕ КОММЕНТАРИЕВ
 
@@ -58,5 +58,5 @@ export function saveComment(index) {
         // Устанавливаем флаг isEdit в значение false
         comments[index].isEdit = false;
     }
-    renderComments();
+    renderApp();
 }
