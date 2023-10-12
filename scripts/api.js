@@ -129,9 +129,7 @@ export function addComment() {
 
 
 // https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md
-// функция добавления комментария на сервер
 export function loginUser({ login, password }) {
-
 
     return fetch('https://wedev-api.sky.pro/api/user/login', {
         method: "POST",
@@ -146,5 +144,23 @@ export function loginUser({ login, password }) {
         return response.json();
     });
 };
+
+export function registerUser({ name, login, password }) {
+
+    return fetch('https://wedev-api.sky.pro/api/user', {
+        method: "POST",
+        body: JSON.stringify({
+            name,
+            login,
+            password,
+        }),
+    }).then((response) => {
+        if (response.status === 400) {
+            throw new Error('Такой пользователь уже существует')
+        }
+        return response.json();
+    });
+};
+
 
 
