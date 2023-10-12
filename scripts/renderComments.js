@@ -2,7 +2,9 @@ import { comments } from './main.js';
 import { addLikeEventListeners, addEditAndSaveEventListeners, listenerEnterNameInput, listenerEnterCommentInput, listenerClickWriteButton, listenerClickDeleteButton } from './listeners.js';
 import { addAnswerEventListeners } from './answerComment.js';
 import { isCommentEmpty, listenerInputFields } from './helpers.js';
-import { getFetchAndRender } from './api.js';
+import { renderLoginComponent } from '../components/login-component.js';
+import { getFetchAndRender } from './api.js'
+
 
 
 
@@ -24,23 +26,12 @@ export function renderApp() {
   const appEl = document.getElementById('app');
 
   if (!token) {
-    const appHTML = `<div class="container">
-    <div id="entrance-form" class="add-form">
-        <p class="add-form-title">Форма входа</p>
-        <input id="login" type="text" class="add-form-entrance" placeholder="Введите логин" />
-        <input id="password" type="password" class="add-form-entrance" placeholder="Введите пароль" />
-        <button id="entrance-button" class="add-form-button-entrance">Войти</button>
-        <div class="add-form-center">
-            <a class="add-form-link" href="#">Зарегистрироваться</a>
-        </div>
-    </div>`;
-    // отрисовка HTML строки на экране
-    appEl.innerHTML = appHTML;
-
-    document.getElementById('entrance-button').addEventListener('click', () => {
-      token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
-      getFetchAndRender();
-    })
+    renderLoginComponent({
+      appEl, setToken: (newToken) => {
+        token = newToken;
+      },
+      getFetchAndRender,
+    });
     return;
   }
 
@@ -106,4 +97,3 @@ export function renderApp() {
   listenerClickWriteButton();
   listenerClickDeleteButton();
 }
-

@@ -5,6 +5,7 @@ import { addLoadingIndicator, renderApp } from './renderComments.js';
 import { addEditAndSaveEventListeners } from './listeners.js';
 
 
+
 //let login = prompt('Логин');
 
 let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
@@ -125,5 +126,25 @@ export function addComment() {
     isCommentEmpty();
     addEditAndSaveEventListeners();
 }
+
+
+// https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md
+// функция добавления комментария на сервер
+export function loginUser({ login, password }) {
+
+
+    return fetch('https://wedev-api.sky.pro/api/user/login', {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            password,
+        }),
+    }).then((response) => {
+        if (response.status === 400) {
+            throw new Error('Неверный логин или пароль')
+        }
+        return response.json();
+    });
+};
 
 
