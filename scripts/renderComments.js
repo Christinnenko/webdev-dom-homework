@@ -2,10 +2,8 @@ import { comments } from './main.js';
 import { addLikeEventListeners, addEditAndSaveEventListeners, listenerEnterNameInput, listenerEnterCommentInput, listenerClickWriteButton, listenerClickDeleteButton } from './listeners.js';
 import { addAnswerEventListeners } from './answerComment.js';
 import { isCommentEmpty, listenerInputFields } from './helpers.js';
-import { renderLoginComponent } from '../components/login-component.js';
+import { renderLoginComponent, userName, token } from '../components/login-component.js';
 import { getFetchAndRender } from './api.js'
-
-
 
 
 //лоадер при загрузке страницы
@@ -16,9 +14,6 @@ export function addLoadingIndicator() {
   </div>`
   appEl.innerHTML = loadingIndicatorHTML;
 }
-
-let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
-token = null;
 
 
 // рендер-функция 
@@ -35,13 +30,12 @@ export function renderApp() {
     return;
   }
 
-
   // формирование HTML строки
   const commentsHTML = comments.map((comment, index) => {
     return `
         <li class="comment">
           <div class="comment-header">
-            <div class="comment-name">${comment.name}</div>
+            <div class="comment-name">${comment.authorName}</div>
             <div>${comment.date}</div>
           </div>
           <div class="comment-body">
@@ -72,7 +66,7 @@ export function renderApp() {
   </div>
   <div class="loading-indicator"></div>
   <div id="comment-form" class="add-form">
-    <input id="input-name" type="text" class="add-form-name" placeholder="Введите ваше имя" />
+    <input id="input-name" type="text" class="add-form-name" placeholder="Введите ваше имя" value = ${userName} />
     <textarea id="input-comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
       rows="4"></textarea>
     <div class="add-form-row">
@@ -97,3 +91,4 @@ export function renderApp() {
   listenerClickWriteButton();
   listenerClickDeleteButton();
 }
+

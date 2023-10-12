@@ -3,13 +3,7 @@ import { showLoadingIndicator, hideLoadingIndicator } from './loadingIndicator.j
 import { setComments } from './main.js';
 import { addLoadingIndicator, renderApp } from './renderComments.js';
 import { addEditAndSaveEventListeners } from './listeners.js';
-
-
-
-//let login = prompt('Логин');
-
-let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
-token = null;
+import { token } from '../components/login-component.js';
 
 const host = 'https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments';
 
@@ -20,9 +14,6 @@ export function getFetchAndRender() {
 
     fetch(host, {
         method: "GET",
-        headers: {
-            Authorization: token,
-        },
     })
         .then((response) => {
             if (response.status === 500) {
@@ -39,7 +30,7 @@ export function getFetchAndRender() {
         .then((responseData) => {
             const appComment = responseData.comments.map((comment) => {
                 return {
-                    name: comment.author.name,
+                    authorName: comment.author.name,
                     date: correctDate(comment.date),
                     text: comment.text,
                     like: comment.likes,
@@ -142,7 +133,7 @@ export function loginUser({ login, password }) {
             throw new Error('Неверный логин или пароль')
         }
         return response.json();
-    });
+    })
 };
 
 export function registerUser({ name, login, password }) {

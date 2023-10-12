@@ -1,6 +1,13 @@
 import { loginUser, registerUser } from "../scripts/api.js";
 
-export function renderLoginComponent({ appEl, setToken, getFetchAndRender }) {
+
+
+
+
+export let userName = 'Аноним';
+export let token = '';
+
+export function renderLoginComponent({ appEl, getFetchAndRender }) {
 
     let isLoginMode = true;
 
@@ -19,11 +26,14 @@ export function renderLoginComponent({ appEl, setToken, getFetchAndRender }) {
         // отрисовка HTML строки на экране
         appEl.innerHTML = appHTML;
 
+
         document.getElementById('entrance-button').addEventListener('click', () => {
+
+
             if (isLoginMode) {
-                //  setToken('Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k');
                 const login = document.getElementById('login').value;
                 const password = document.getElementById('password').value;
+
 
                 if (!login) {
                     alert('Введите логин');
@@ -38,8 +48,9 @@ export function renderLoginComponent({ appEl, setToken, getFetchAndRender }) {
                 loginUser({
                     login: login,
                     password: password,
-                }).then((user) => {
-                    setToken(`Bearer ${user.user.token} `);
+                }).then((response) => {
+                    token = `Bearer ${response.user.token}`;
+                    userName = response.user.name;
                     getFetchAndRender();
                 }).catch(error => {
                     //TODO: выводить alert красиво
@@ -70,8 +81,9 @@ export function renderLoginComponent({ appEl, setToken, getFetchAndRender }) {
                     name: name,
                     login: login,
                     password: password,
-                }).then((user) => {
-                    setToken(`Bearer ${user.user.token} `);
+                }).then((response) => {
+                    token = `Bearer ${response.user.token}`;
+                    userName = response.user.name;
                     getFetchAndRender();
                 }).catch(error => {
                     //TODO: выводить alert красиво
