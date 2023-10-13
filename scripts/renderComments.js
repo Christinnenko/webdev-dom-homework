@@ -1,22 +1,30 @@
 import { comments } from './main.js';
-import { addLikeEventListeners, addEditAndSaveEventListeners } from './listeners.js';
+import { addLikeEventListeners, addEditAndSaveEventListeners, listenerEnterNameInput, listenerEnterCommentInput, listenerClickWriteButton, listenerClickDeleteButton } from './listeners.js';
 import { addAnswerEventListeners } from './answerComment.js';
-import { isCommentEmpty } from './helpers.js'
+import { isCommentEmpty, listenerInputFields } from './helpers.js';
+import { renderLoginComponent, userName, token } from '../components/login-component.js';
+import { getFetchAndRender } from './api.js'
 
+
+//лоадер при загрузке страницы
+export function addLoadingIndicator() {
+  const appEl = document.getElementById('app');
+  const loadingIndicatorHTML = `<div class="container">
+  <div class="loading-indicator"></div>
+  </div>`
+  appEl.innerHTML = loadingIndicatorHTML;
+}
 
 
 // рендер-функция 
-export function renderComments() {
+export function renderApp() {
+  const appEl = document.getElementById('app');
 
-  // поиск элемента списка
-  const listElement = document.getElementById("list");
-
-  // формирование HTML строки
   const commentsHTML = comments.map((comment, index) => {
     return `
-        <li class="comment">
+        <li class="comment" data-id="${comment.id}">
           <div class="comment-header">
-            <div class="comment-name">${comment.name}</div>
+            <div class="comment-name">${comment.authorName}</div>
             <div>${comment.date}</div>
           </div>
           <div class="comment-body">
@@ -36,15 +44,75 @@ export function renderComments() {
         </li>`
   }).join('');
 
+  const authorizationRow = `<p>Для добавления комментария, <a id="login-link" class="add-form-link" href='#'>зарегистрируйтесь</а></p>`
 
-  // отрисовка HTML строки на экране
-  listElement.innerHTML = commentsHTML;
+  const deleteButton = `<div>
+  <button id="button-delete" class="add-form-button inactive-form-button">Удалить последний комментарий</button>
+</div>`
+
+  const addCommentForm = `<div id="comment-form" class="add-form">
+      <input id="input-name" type="text" class="add-form-name" placeholder="Введите ваше имя" value = ${userName} />
+      <textarea id="input-comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
+        rows="4"></textarea>
+      <div class="add-form-row">
+        <button id="button-write" class="add-form-button inactive-form-button">Написать</button>
+      </div>
+    </div>`
+
+  if (!token) {
+
+    const appHTML = `
+    <div class="container">
+    <ul id="list" class="comments">
+    ${commentsHTML}
+    </ul>
+    ${authorizationRow}
+    </div>`
+
+    appEl.innerHTML = appHTML;
+
+    const editButtonElements = document.getElementsByClassName("edit-button");
+    for (const button of editButtonElements) {
+      button.style.display = "none";
+    }
 
 
-  // добавляем обработчики на полученные комментарии
-  addLikeEventListeners();
-  addEditAndSaveEventListeners();
-  addAnswerEventListeners();
-  isCommentEmpty();
+    document.getElementById('login-link').addEventListener('click', () => {
+      renderLoginComponent({
+        appEl, setToken: (newToken) => {
+          token = newToken;
+        },
+        getFetchAndRender,
+      });
+      return;
+    })
+
+
+  } else {
+    const appHTML = `
+    <div class="container">
+    <ul id="list" class="comments">
+    ${commentsHTML}
+    </ul>
+    ${deleteButton}
+    <div class="loading-indicator"></div>
+    ${addCommentForm}
+    </div>`
+
+    appEl.innerHTML = appHTML;
+
+
+
+    addLikeEventListeners();
+    addEditAndSaveEventListeners();
+    addAnswerEventListeners();
+    isCommentEmpty();
+    listenerInputFields();
+    listenerEnterNameInput();
+    listenerEnterCommentInput();
+    listenerClickWriteButton();
+    listenerClickDeleteButton();
+  }
+
 }
 

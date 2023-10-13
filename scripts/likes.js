@@ -1,5 +1,5 @@
 import { comments } from './main.js';
-import { renderComments } from './renderComments.js'
+import { renderApp } from './renderComments.js'
 
 //ДОБАВЛЕНИЕ И СНЯТИЕ ЛАЙКА НА КОММЕНТАРИИ
 
@@ -15,11 +15,11 @@ export function addLike(index) {
         if (!comment.isLiked) {
             comment.like += 1;
             comment.isLiked = true; // Устанавливаем состояние лайка в "закрашенный"
-            renderComments();
+            renderApp();
         } else {
             comment.like -= 1;
             comment.isLiked = false; // Устанавливаем состояние лайка в "не закрашенный"
-            renderComments();
+            renderApp();
         }
     });
 }

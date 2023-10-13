@@ -1,5 +1,6 @@
 "use strict";
 
+
 import { getFetchAndRender } from './api.js';
 
 // рендер имеющихся на сервере комментариев 
