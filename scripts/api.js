@@ -14,6 +14,9 @@ export function getFetchAndRender() {
 
     fetch(host, {
         method: "GET",
+        headers: {
+            Authorization: token,
+        },
     })
         .then((response) => {
             if (response.status === 500) {
@@ -30,6 +33,7 @@ export function getFetchAndRender() {
         .then((responseData) => {
             const appComment = responseData.comments.map((comment) => {
                 return {
+                    id: comment.id,
                     authorName: comment.author.name,
                     date: correctDate(comment.date),
                     text: comment.text,
@@ -117,6 +121,19 @@ export function addComment() {
     isCommentEmpty();
     addEditAndSaveEventListeners();
 }
+
+export function delComment(token, id) {
+
+    return fetch(`${host}/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: token,
+        },
+    }).then((response) => {
+        return response.json();
+    })
+}
+
 
 
 // https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md

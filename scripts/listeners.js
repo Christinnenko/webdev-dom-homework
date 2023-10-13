@@ -2,8 +2,8 @@ import { isCommentEmpty } from './helpers.js';
 import { comments } from './main.js';
 import { editComment, saveComment } from './editComments.js'
 import { addLike } from './likes.js';
-import { addComment } from './api.js';
-
+import { addComment, delComment, getFetchAndRender } from './api.js';
+import { token } from '../components/login-component.js';
 
 
 
@@ -57,8 +57,40 @@ export function listenerClickWriteButton() {
     })
 };
 
+// export function listenerClickDeleteButton() {
+//     const deleteButtonElement = document.getElementById("button-delete");
+
+//     // добавляем обработчик клика на кнопку "Удалить последний комментарий"
+//     deleteButtonElement.addEventListener("click", () => {
+
+//         //поиск элементов
+//         const listElement = document.getElementById("list");
+//         const commentsElements = listElement.getElementsByClassName("comment");
+
+//         if (commentsElements.length > 0) {
+//             // Получите последний комментарий (последний элемент массива)
+//             const lastCommentElement = commentsElements[commentsElements.length - 1];
+
+//             // Получите id комментария из атрибута data-id
+//             const id = lastCommentElement.dataset.id;
+
+//             // Выполните удаление комментария, например, через API
+//             delComment(token, id)
+//                 .then(() => {
+//                     // Удалите последний комментарий из DOM
+//                     listElement.removeChild(lastCommentElement);
+//                     // Обновите отображение
+//                     getFetchAndRender();
+//                 });
+//         }
+//     });
+//     isCommentEmpty();
+// }
+
+
 export function listenerClickDeleteButton() {
     const deleteButtonElement = document.getElementById("button-delete");
+
     // добавляем обработчик клика на кнопку "Удалить последний комментарий"
     deleteButtonElement.addEventListener("click", () => {
 
@@ -66,22 +98,32 @@ export function listenerClickDeleteButton() {
         const listElement = document.getElementById("list");
         const commentsElements = listElement.getElementsByClassName("comment");
 
-
-        // проверка на наличие комментариев
         if (commentsElements.length > 0) {
-            // Находим индекс последнего комментария 
-            const lastIndex = commentsElements.length - 1;
-            // удаляем последний дочерний элемент списка DOM
-            listElement.removeChild(commentsElements[lastIndex]);
+            // Получите последний комментарий (последний элемент массива)
+            const lastCommentElement = commentsElements[commentsElements.length - 1];
 
-            // обновляем массив comments, удалив последний комментарий из этого массива
-            comments.pop();
+            // Получите id комментария из атрибута data-id
+            const id = lastCommentElement.dataset.id;
 
-            // Проверяем наличие комментариев после удаления последнего комментария
-            isCommentEmpty();
+            // Выполните удаление комментария, например, через API
+            delComment(token, id)
+                .then(() => {
+                    // Удалите последний комментарий из DOM
+                    listElement.removeChild(lastCommentElement);
+
+                    // Обновите отображение
+                    getFetchAndRender();
+                });
         }
-    })
-};
+    });
+    isCommentEmpty();
+}
+
+
+
+
+
+
 
 
 // Функция для привязки обработчиков событий к кнопкам "лайк"
