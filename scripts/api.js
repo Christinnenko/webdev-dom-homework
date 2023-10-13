@@ -23,8 +23,6 @@ export function getFetchAndRender() {
                 alert('Сервер сломался, попробуй позже');
                 throw new Error('Неполадки в работе сервера');
             } else if (response.status === 400) {
-                // token = prompt('Введите верный пароль');
-                // getFetchAndRender();
                 throw new Error('Нет авторизации');
             } else {
                 return response.json();
