@@ -1,27 +1,19 @@
-import { correctDate, isCommentEmpty } from "./helpers.js";
 import {
+  isCommentEmpty,
   showLoadingIndicator,
   hideLoadingIndicator,
-} from "./loadingIndicator.js";
+} from "./helpers.js";
 import { setComments } from "./main.js";
-import {
-  addLoadingIndicator,
-  renderApp,
-} from "../components/render-component.js";
+import { renderApp } from "../components/render-component.js";
 import { addEditAndSaveEventListeners } from "./listeners.js";
 import { token } from "../components/login-component.js";
-
-const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
+import { format } from "date-fns";
 
 export function getFetchAndRender() {
-  addLoadingIndicator();
-  showLoadingIndicator();
+  const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
 
   fetch(host, {
     method: "GET",
-    headers: {
-      Authorization: token,
-    },
   })
     .then((response) => {
       if (response.status === 500) {
@@ -35,10 +27,14 @@ export function getFetchAndRender() {
     })
     .then((responseData) => {
       const appComment = responseData.comments.map((comment) => {
+        const createDate = format(
+          new Date(comment.date),
+          "yyyy-MM-dd hh.mm.ss"
+        );
         return {
           id: comment.id,
           authorName: comment.author.name,
-          date: correctDate(comment.date),
+          date: createDate,
           text: comment.text,
           like: comment.likes,
           isLiked: false,
@@ -47,7 +43,6 @@ export function getFetchAndRender() {
 
       setComments(appComment);
       renderApp();
-      // hideLoadingIndicator();
     })
     .catch((error) => {
       alert("Кажется, у вас сломался интернет, попробуйте позже");
@@ -59,6 +54,7 @@ export function getFetchAndRender() {
 
 // функция добавления комментария на сервер
 export function addComment() {
+  const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
   const nameInputElement = document.getElementById("input-name");
   const commentInputElement = document.getElementById("input-comment");
   const writeButtonElement = document.getElementById("button-write");
@@ -123,6 +119,7 @@ export function addComment() {
 }
 
 export function delComment(token, id) {
+  const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
   return fetch(`${host}/${id}`, {
     method: "DELETE",
     headers: {

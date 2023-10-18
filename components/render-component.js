@@ -6,10 +6,12 @@ import {
   listenerEnterCommentInput,
   listenerClickWriteButton,
   listenerClickDeleteButton,
+  addAnswerEventListeners,
+  listenerInputFields,
 } from "../scripts/listeners.js";
-import { addAnswerEventListeners } from "../scripts/answerComment.js";
-import { isCommentEmpty, listenerInputFields } from "../scripts/helpers.js";
-import { renderLoginComponent, userName, token } from "./login-component.js";
+import { token } from "./login-component.js";
+import { isCommentEmpty } from "../scripts/helpers.js";
+import { renderLoginComponent, userName } from "./login-component.js";
 import { getFetchAndRender } from "../scripts/api.js";
 
 //лоадер при загрузке страницы
@@ -20,7 +22,6 @@ export function addLoadingIndicator() {
   </div>`;
   appEl.innerHTML = loadingIndicatorHTML;
 }
-
 // рендер-функция
 export function renderApp() {
   const appEl = document.getElementById("app");
