@@ -1,9 +1,10 @@
 import { loginUser, registerUser } from "../scripts/api.js";
+import { getFetchAndRender } from "../scripts/api.js";
 
 export let userName = "Аноним";
-export let token = "";
+export let token = null;
 
-export function renderLoginComponent({ appEl, getFetchAndRender }) {
+export function renderLoginComponent({ appEl }) {
   let isLoginMode = true;
 
   const renderForm = () => {
@@ -53,7 +54,7 @@ export function renderLoginComponent({ appEl, getFetchAndRender }) {
           .then((response) => {
             token = `Bearer ${response.user.token}`;
             userName = response.user.name;
-            getFetchAndRender();
+            getFetchAndRender(token);
           })
           .catch((error) => {
             //TODO: выводить alert красиво
@@ -87,7 +88,7 @@ export function renderLoginComponent({ appEl, getFetchAndRender }) {
           .then((response) => {
             token = `Bearer ${response.user.token}`;
             userName = response.user.name;
-            getFetchAndRender();
+            getFetchAndRender(token);
           })
           .catch((error) => {
             //TODO: выводить alert красиво

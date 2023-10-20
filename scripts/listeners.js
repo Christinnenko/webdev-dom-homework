@@ -47,7 +47,7 @@ export function listenerEnterNameInput() {
       !event.ctrlKey &&
       !event.altKey
     ) {
-      addComment();
+      addComment(token);
     }
   });
 }
@@ -62,7 +62,7 @@ export function listenerEnterCommentInput() {
       !event.ctrlKey &&
       !event.altKey
     ) {
-      addComment();
+      addComment(token);
     }
   });
 }
@@ -71,7 +71,7 @@ export function listenerClickWriteButton() {
   const writeButtonElement = document.getElementById("button-write");
   // добавление обработчика клика при нажатии на кнопку "написать"
   writeButtonElement.addEventListener("click", () => {
-    addComment();
+    addComment(token);
   });
 }
 
@@ -110,7 +110,11 @@ export function addLikeEventListeners() {
 
   likeButtons.forEach((likeButton, index) => {
     likeButton.addEventListener("click", () => {
-      addLike(index);
+      const listElement = document.getElementById("list");
+      const commentsElements = listElement.getElementsByClassName("comment");
+      const id = commentsElements[index].dataset.id;
+
+      addLike(index, id);
       likeButton.classList.add("-loading-like");
     });
   });

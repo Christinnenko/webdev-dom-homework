@@ -4,17 +4,29 @@ import {
   hideLoadingIndicator,
 } from "./helpers.js";
 import { setComments } from "./main.js";
-import { renderApp } from "../components/render-component.js";
+import { token, renderApp } from "../components/render-component.js";
 import { addEditAndSaveEventListeners } from "./listeners.js";
-import { token } from "../components/login-component.js";
 import { format } from "date-fns";
 
-export function getFetchAndRender() {
+export function getFetchAndRender(token) {
   const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
 
-  fetch(host, {
-    method: "GET",
-  })
+  let fetchConfig;
+
+  if (token) {
+    fetchConfig = {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    };
+  } else {
+    fetchConfig = {
+      method: "GET",
+    };
+  }
+
+  fetch(host, fetchConfig)
     .then((response) => {
       if (response.status === 500) {
         alert("Сервер сломался, попробуй позже");
@@ -37,7 +49,7 @@ export function getFetchAndRender() {
           date: createDate,
           text: comment.text,
           like: comment.likes,
-          isLiked: false,
+          isLiked: comment.isLiked,
         };
       });
 
@@ -53,7 +65,7 @@ export function getFetchAndRender() {
 }
 
 // функция добавления комментария на сервер
-export function addComment() {
+export function addComment(token) {
   const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
   const nameInputElement = document.getElementById("input-name");
   const commentInputElement = document.getElementById("input-comment");
@@ -122,6 +134,18 @@ export function delComment(token, id) {
   const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
   return fetch(`${host}/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    return response.json();
+  });
+}
+
+export function addLikeComment(token, id) {
+  const host = "https://wedev-api.sky.pro/api/v2/christina-ermolenko/comments";
+  return fetch(`${host}/${id}/toggle-like`, {
+    method: "POST",
     headers: {
       Authorization: token,
     },
