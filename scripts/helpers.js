@@ -1,5 +1,7 @@
 import { comments } from "./main.js";
 import { renderApp } from "../components/render-component.js";
+import { token } from "../components/login-component.js";
+import { addLikeComment } from "./api.js";
 
 export function showLoadingIndicator() {
   const loadingIndicator = document.querySelector(".loading-indicator");
@@ -93,19 +95,15 @@ function delay(ms) {
 }
 
 // Функция для добавления лайка
-export function addLike(index) {
+export function addLike(index, id) {
   const comment = comments[index];
 
-  delay(2000).then(() => {
-    if (!comment.isLiked) {
-      comment.like += 1;
-      comment.isLiked = true; // Устанавливаем состояние лайка в "закрашенный"
+  addLikeComment(token, id).then((response) => {
+    delay(2000).then(() => {
+      comment.like = response.result.likes;
+      comment.isLiked = response.result.isLiked;
       renderApp();
-    } else {
-      comment.like -= 1;
-      comment.isLiked = false; // Устанавливаем состояние лайка в "не закрашенный"
-      renderApp();
-    }
+    });
   });
 }
 

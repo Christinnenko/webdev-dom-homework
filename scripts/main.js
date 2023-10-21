@@ -12,4 +12,4 @@ export const setComments = (newComments) => {
 
 addLoadingIndicator();
 showLoadingIndicator();
-getFetchAndRender();
+getFetchAndRender(localStorage.token);
