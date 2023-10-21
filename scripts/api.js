@@ -3,8 +3,9 @@ import {
   showLoadingIndicator,
   hideLoadingIndicator,
 } from "./helpers.js";
+1;
 import { setComments } from "./main.js";
-import { token, renderApp } from "../components/render-component.js";
+import { renderApp } from "../components/render-component.js";
 import { addEditAndSaveEventListeners } from "./listeners.js";
 import { format } from "date-fns";
 
@@ -39,10 +40,7 @@ export function getFetchAndRender(token) {
     })
     .then((responseData) => {
       const appComment = responseData.comments.map((comment) => {
-        const createDate = format(
-          new Date(comment.date),
-          "yyyy-MM-dd hh.mm.ss"
-        );
+        const createDate = format(new Date(comment.date), "dd.MM.yyyy hh:mm");
         return {
           id: comment.id,
           authorName: comment.author.name,

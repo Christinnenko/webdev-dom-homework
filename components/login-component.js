@@ -1,11 +1,14 @@
 import { loginUser, registerUser } from "../scripts/api.js";
 import { getFetchAndRender } from "../scripts/api.js";
 
-export let userName = "Аноним";
-export let token = null;
+export let userName = localStorage.getItem("userName");
+export let token = localStorage.getItem("token");
 
 export function renderLoginComponent({ appEl }) {
-  let isLoginMode = true;
+  let isLoginMode = false;
+  if (token == null || token == undefined) {
+    isLoginMode = true;
+  }
 
   const renderForm = () => {
     const appHTML = `<div class="container">
@@ -53,8 +56,10 @@ export function renderLoginComponent({ appEl }) {
         })
           .then((response) => {
             token = `Bearer ${response.user.token}`;
+            localStorage.token = token;
             userName = response.user.name;
-            getFetchAndRender(token);
+            localStorage.userName = userName;
+            getFetchAndRender(localStorage.token);
           })
           .catch((error) => {
             //TODO: выводить alert красиво
@@ -87,8 +92,10 @@ export function renderLoginComponent({ appEl }) {
         })
           .then((response) => {
             token = `Bearer ${response.user.token}`;
+            localStorage.token = token;
             userName = response.user.name;
-            getFetchAndRender(token);
+            localStorage.userName = userName;
+            getFetchAndRender(localStorage.token);
           })
           .catch((error) => {
             //TODO: выводить alert красиво
