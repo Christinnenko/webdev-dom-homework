@@ -73,9 +73,6 @@ export function addComment(token) {
     const nameInputElement = document.getElementById("input-name");
     const commentInputElement = document.getElementById("input-comment");
     const writeButtonElement = document.getElementById("button-write");
-    // Переменные для хранения введенных данных
-    let enteredName = "";
-    let enteredComment = "";
 
     showLoadingIndicator();
 
@@ -114,8 +111,6 @@ export function addComment(token) {
             if (responseData) {
                 nameInputElement.value = "";
                 commentInputElement.value = "";
-                enteredName = "";
-                enteredComment = "";
                 getFetchAndRender();
             }
         })

@@ -6,7 +6,7 @@ export let token = localStorage.getItem("token");
 
 export function renderLoginComponent({ appEl }) {
     let isLoginMode = false;
-    if (token == null || token == undefined) {
+    if (token === null || token === undefined) {
         isLoginMode = true;
     }
 
