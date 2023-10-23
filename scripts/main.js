@@ -7,7 +7,7 @@ import { addLoadingIndicator } from "../components/render-component.js";
 // рендер имеющихся на сервере комментариев
 export let comments = [];
 export const setComments = (newComments) => {
-  comments = newComments;
+    comments = newComments;
 };
 
 addLoadingIndicator();

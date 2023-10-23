@@ -1,13 +1,13 @@
 import { comments } from "../scripts/main.js";
 import {
-  addLikeEventListeners,
-  addEditAndSaveEventListeners,
-  listenerEnterNameInput,
-  listenerEnterCommentInput,
-  listenerClickWriteButton,
-  listenerClickDeleteButton,
-  addAnswerEventListeners,
-  listenerInputFields,
+    addLikeEventListeners,
+    addEditAndSaveEventListeners,
+    listenerEnterNameInput,
+    listenerEnterCommentInput,
+    listenerClickWriteButton,
+    listenerClickDeleteButton,
+    addAnswerEventListeners,
+    listenerInputFields,
 } from "../scripts/listeners.js";
 import { token } from "./login-component.js";
 import { isCommentEmpty } from "../scripts/helpers.js";
@@ -16,19 +16,19 @@ import { getFetchAndRender } from "../scripts/api.js";
 
 //лоадер при загрузке страницы
 export function addLoadingIndicator() {
-  const appEl = document.getElementById("app");
-  const loadingIndicatorHTML = `<div class="container">
+    const appEl = document.getElementById("app");
+    const loadingIndicatorHTML = `<div class="container">
   <div class="loading-indicator"></div>
   </div>`;
-  appEl.innerHTML = loadingIndicatorHTML;
+    appEl.innerHTML = loadingIndicatorHTML;
 }
 // рендер-функция
 export function renderApp() {
-  const appEl = document.getElementById("app");
+    const appEl = document.getElementById("app");
 
-  const commentsHTML = comments
-    .map((comment, index) => {
-      return `
+    const commentsHTML = comments
+        .map((comment, index) => {
+            return `
         <li class="comment" data-id="${comment.id}">
           <div class="comment-header">
             <div class="comment-name">${comment.authorName}</div>
@@ -37,8 +37,8 @@ export function renderApp() {
           <div class="comment-body">
             <div class="comment-text">
             <span class="comment-content">${comment.text
-              .replaceAll("BEGIN_QUOTE--", "<div class='quote'>")
-              .replaceAll("--END_QUOTE", "</div>")}</span>
+                .replaceAll("BEGIN_QUOTE--", "<div class='quote'>")
+                .replaceAll("--END_QUOTE", "</div>")}</span>
             <textarea class="comment-edit" style="display: none;"></textarea>
             </div>
           </div>
@@ -46,23 +46,23 @@ export function renderApp() {
             <div class="likes">
             <span class="likes-counter">${comment.like}</span>
             <button data-index="${index}" class="like-button ${
-        comment.isLiked ? "-active-like" : ""
-      }"></button>
+                comment.isLiked ? "-active-like" : ""
+            }"></button>
           </div>
           <button data-index="${index}" class="edit-button">Редактировать</button>
           <button data-index="${index}" class="save-button">Сохранить</button>
           </div>
         </li>`;
-    })
-    .join("");
+        })
+        .join("");
 
-  const authorizationRow = `<p>Для добавления комментария, <a id="login-link" class="add-form-link" href='#'>зарегистрируйтесь</а></p>`;
+    const authorizationRow = `<p>Для добавления комментария, <a id="login-link" class="add-form-link" href='#'>зарегистрируйтесь</а></p>`;
 
-  const deleteButton = `<div>
+    const deleteButton = `<div>
   <button id="button-delete" class="add-form-button inactive-form-button">Удалить последний комментарий</button>
 </div>`;
 
-  const addCommentForm = `<div id="comment-form" class="add-form">
+    const addCommentForm = `<div id="comment-form" class="add-form">
       <input id="input-name" type="text" class="add-form-name" placeholder="Введите ваше имя" value = ${userName} />
       <textarea id="input-comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>
@@ -71,8 +71,8 @@ export function renderApp() {
       </div>
     </div>`;
 
-  if (!token) {
-    const appHTML = `
+    if (!token) {
+        const appHTML = `
     <div class="container">
     <ul id="list" class="comments">
     ${commentsHTML}
@@ -80,25 +80,26 @@ export function renderApp() {
     ${authorizationRow}
     </div>`;
 
-    appEl.innerHTML = appHTML;
+        appEl.innerHTML = appHTML;
 
-    const editButtonElements = document.getElementsByClassName("edit-button");
-    for (const button of editButtonElements) {
-      button.style.display = "none";
-    }
+        const editButtonElements =
+            document.getElementsByClassName("edit-button");
+        for (const button of editButtonElements) {
+            button.style.display = "none";
+        }
 
-    document.getElementById("login-link").addEventListener("click", () => {
-      renderLoginComponent({
-        appEl,
-        setToken: (newToken) => {
-          token = newToken;
-        },
-        getFetchAndRender,
-      });
-      return;
-    });
-  } else {
-    const appHTML = `
+        document.getElementById("login-link").addEventListener("click", () => {
+            renderLoginComponent({
+                appEl,
+                setToken: (newToken) => {
+                    token = newToken;
+                },
+                getFetchAndRender,
+            });
+            return;
+        });
+    } else {
+        const appHTML = `
     <div class="container">
     <ul id="list" class="comments">
     ${commentsHTML}
@@ -108,16 +109,16 @@ export function renderApp() {
     ${addCommentForm}
     </div>`;
 
-    appEl.innerHTML = appHTML;
+        appEl.innerHTML = appHTML;
 
-    addLikeEventListeners();
-    addEditAndSaveEventListeners();
-    addAnswerEventListeners();
-    isCommentEmpty();
-    listenerInputFields();
-    listenerEnterNameInput();
-    listenerEnterCommentInput();
-    listenerClickWriteButton();
-    listenerClickDeleteButton();
-  }
+        addLikeEventListeners();
+        addEditAndSaveEventListeners();
+        addAnswerEventListeners();
+        isCommentEmpty();
+        listenerInputFields();
+        listenerEnterNameInput();
+        listenerEnterCommentInput();
+        listenerClickWriteButton();
+        listenerClickDeleteButton();
+    }
 }
