@@ -91,9 +91,9 @@ export function renderApp() {
         document.getElementById("login-link").addEventListener("click", () => {
             renderLoginComponent({
                 appEl,
-                setToken: (newToken) => {
-                    token = newToken;
-                },
+                // setToken: (newToken) => {
+                //     token = newToken;
+                // },
                 getFetchAndRender,
             });
             return;
