@@ -117,7 +117,7 @@ export function addLikeEventListeners() {
             const id = commentsElements[index].dataset.id;
 
             addLike(index, id);
-            likeButton.classList.add("-loading-like");
+            likeButton.classList.add("loading-like");
         });
     });
 }

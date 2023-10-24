@@ -46,7 +46,7 @@ export function renderApp() {
             <div class="likes">
             <span class="likes-counter">${comment.like}</span>
             <button data-index="${index}" class="like-button ${
-                comment.isLiked ? "-active-like" : ""
+                comment.isLiked ? "active-like" : ""
             }"></button>
           </div>
           <button data-index="${index}" class="edit-button">Редактировать</button>
