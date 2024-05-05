@@ -2,9 +2,9 @@
 
 ## Деплой проекта: https://christinnenko.github.io/webdev-dom-homework/
 
-![image](https://github.com/Christinnenko/webdev-dom-homework/assets/135636897/cc14d579-0e09-4be7-b4a5-d7590e9f5b31)
-
 ## Проект "Лента комментариев" - сервис, который предоставляет пользователям возможность регистрации в приложении для написания, редактирования, сохранения и удаления комментариев, а также просмотра и оценки комментариев других пользователей.
+
+![image](https://github.com/Christinnenko/webdev-dom-homework/assets/135636897/cc14d579-0e09-4be7-b4a5-d7590e9f5b31)
 
 ### Реализованы:
 
